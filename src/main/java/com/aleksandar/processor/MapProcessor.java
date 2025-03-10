@@ -97,43 +97,34 @@ public class MapProcessor {
             case DOWN:
 
                 // Vertical to horizontal turn
-                Character leftNeighbour = map.getNeighbourValue(position, LEFT);
-                Character rightNeighbour = map.getNeighbourValue(position, RIGHT);
-
-                if (Character.valueOf('-').equals(leftNeighbour) && Character.valueOf('-').equals(rightNeighbour)) {
-
-                    throw new ForkInPathException();
-
-                } else if (isCharacterValidTurn(leftNeighbour, LEFT)) {
-
-                    direction = MapDirection.LEFT;
-
-                } else if (isCharacterValidTurn(rightNeighbour, RIGHT)) {
-
-                    direction = MapDirection.RIGHT;
-
-                }
+                rotateDirection(LEFT, RIGHT);
                 break;
             case LEFT:
             case RIGHT:
 
                 // Horizontal to vertical turn
-                Character upNeighbour = map.getNeighbourValue(position, UP);
-                Character downNeighbour = map.getNeighbourValue(position, DOWN);
-
-                if (Character.valueOf('|').equals(upNeighbour) && Character.valueOf('|').equals(downNeighbour)) {
-
-                    throw new ForkInPathException();
-
-                } else if (isCharacterValidTurn(upNeighbour, UP)) {
-
-                    direction = MapDirection.UP;
-
-                } else if (isCharacterValidTurn(downNeighbour, DOWN)) {
-
-                    direction = MapDirection.DOWN;
-                }
+                rotateDirection(UP, DOWN);
                 break;
+        }
+    }
+
+    /**
+     * Rotates the direction 90 or 270 degrees depending on which way it's a valid turn.
+     * @param directionOptionOne the first direction option
+     * @param directionOptionTwo the second direction option
+     */
+    private void rotateDirection(MapDirection directionOptionOne, MapDirection directionOptionTwo) {
+
+        Character optionOneNeighbour = map.getNeighbourValue(position, directionOptionOne);
+        Character optionTwoNeighbour = map.getNeighbourValue(position, directionOptionTwo);
+
+        if (Character.valueOf(directionOptionOne.getSymbol()).equals(optionOneNeighbour)
+                && Character.valueOf(directionOptionTwo.getSymbol()).equals(optionTwoNeighbour)) {
+            throw new ForkInPathException();
+        } else if (isCharacterValidTurn(optionOneNeighbour, directionOptionOne)) {
+            direction = directionOptionOne;
+        } else if (isCharacterValidTurn(optionTwoNeighbour, directionOptionTwo)) {
+            direction = directionOptionTwo;
         }
     }
 
