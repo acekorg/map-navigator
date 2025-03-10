@@ -128,6 +128,10 @@ public class MapProcessor {
         }
     }
 
+    /**
+     * Determines the initial direction based on the starting position.
+     * @return the initial direction
+     */
     private MapDirection determineInitialDirection() {
 
         Character upValue = map.getNeighbourValue(position, UP);
@@ -157,6 +161,11 @@ public class MapProcessor {
         return null;
     }
 
+    /**
+     * Collects the found letters in the order they were found.
+     * @param letterPositions the positions of the found letters
+     * @return the found letters
+     */
     private String collectFoundLetters(Set<Position> letterPositions) {
 
         StringBuilder foundLettersBuilder = new StringBuilder();
