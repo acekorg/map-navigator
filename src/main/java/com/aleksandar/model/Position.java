@@ -39,11 +39,21 @@ public class Position {
         }
     }
 
+    /**
+     * Overriding hashCode to compare positions when being used in Set collection.
+     * @return unique hash value
+     */
     @Override
     public int hashCode() {
-        return row + column;
+        // Using prime number for unique combination
+        return 31 * row + column;
     }
 
+    /**
+     * Overriding equals to compare positions when being used in Set collection.
+     * @param obj object to compare
+     * @return true if the positions are equal, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Position position && position.row == row && position.column == column;

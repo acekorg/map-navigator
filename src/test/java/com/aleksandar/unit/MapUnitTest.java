@@ -30,12 +30,12 @@ public class MapUnitTest {
 
         // THEN
         assertNotNull(map);
-        assertEquals(1, map.getStart().getRow());
-        assertEquals(2, map.getStart().getColumn());
+        assertEquals(2, map.getStart().getRow());
+        assertEquals(1, map.getStart().getColumn());
         assertEquals('x', map.getValue(new Position(2, 3)));
         assertEquals(' ', map.getNeighbourValue(new Position(1, 1), MapDirection.RIGHT));
-        assertEquals(' ', map.getNeighbourValue(new Position(1, 1), MapDirection.DOWN));
-        assertEquals('|', map.getNeighbourValue(new Position(1, 1), MapDirection.UP));
+        assertEquals('@', map.getNeighbourValue(new Position(1, 1), MapDirection.DOWN));
+        assertEquals('+', map.getNeighbourValue(new Position(1, 1), MapDirection.UP));
         assertEquals(' ', map.getNeighbourValue(new Position(1, 1), MapDirection.LEFT));
         assertNull(map.getNeighbourValue(new Position(0, 0), MapDirection.LEFT));
         assertNull(map.getNeighbourValue(new Position(0, 0), MapDirection.UP));
@@ -69,7 +69,7 @@ public class MapUnitTest {
         Exception exception = assertThrows(MultipleStartingPointsException.class, () -> new Map(matrix));
 
         // THEN
-        assertEquals("Multiple starting points found", exception.getMessage());
+        assertEquals("Multiple starting points", exception.getMessage());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class MapUnitTest {
         Exception exception = assertThrows(MissingStartCharacterException.class, () -> new Map(matrix));
 
         // THEN
-        assertEquals("Missing starting point", exception.getMessage());
+        assertEquals("Missing start character", exception.getMessage());
     }
 
     @Test

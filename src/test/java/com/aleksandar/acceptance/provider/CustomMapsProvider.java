@@ -15,6 +15,7 @@ public class CustomMapsProvider implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
         return Stream.of(
+                // Map with double intersection cross
                 Arguments.of(new char[][]{
                         {'@', '-', '-', '-', 'A', ' ', ' ', ' ', ' '},
                         {' ', ' ', ' ', ' ', '|', '+', 'B', '-', '+'},
@@ -22,15 +23,21 @@ public class CustomMapsProvider implements ArgumentsProvider {
                         {'x', '-', 'D', '-', '|', '|', '-', '-', '+'},
                         {' ', ' ', ' ', ' ', '+', '+', ' ', ' ', ' '}
                 }, new Result("ABCD", "@---A|||++||+B-+C+--||-D-x")),
+                // Map with compact letter turns
                 Arguments.of(new char[][]{
                         {' ', '+', '-', 'E', '-', '+'},
                         {' ', '|', ' ', ' ', '+', 'S', '-', '+'},
                         {'@', 'P', 'R', ' ', '+', '+', ' ', 'S'},
                         {' ', 'C', 'O', ' ', ' ', ' ', ' ', 'x'}
-                }, new Result("PROCESS", "@PROCP|+-E-+S+++S-+Sx"))
+                }, new Result("PROCESS", "@PROCP|+-E-+S+++S-+Sx")),
+                // Map with parallel neighbouring paths and change of direction with letter followed by x.
+                Arguments.of(new char[][]{
+                        {' ', ' ', '+', '+', ' ', ' '},
+                        {' ', ' ', '|', '|', ' ', ' ', ' ', ' '},
+                        {'@', '-', '+', '|', ' ', '+', '-', 'C'},
+                        {' ', ' ', ' ', 'A', '-', 'B', ' ', 'x'}
+                }, new Result("ABC", "@-+|++||A-B+-Cx"))
         );
-
     }
-
 }
 

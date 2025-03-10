@@ -40,6 +40,7 @@ public class MapProcessor {
 
         boolean iterationComplete = false;
 
+        // To avoid duplication of letters, only Position objects are stored in a set
         Set<Position> letters = new LinkedHashSet<>();
         StringBuilder path = new StringBuilder();
 
@@ -64,14 +65,21 @@ public class MapProcessor {
 
         } while (!iterationComplete);
 
+        String collectedLetters = collectFoundLetters(letters);
+
         return new Result(
-                collectFoundLetters(letters),
+                collectedLetters,
                 path.toString()
         );
     }
 
+    /**
+     * Rotates the direction if needed.
+     * @param isLetterPosition True if it's a rotation by letter, false if it's rotation by '+'.
+     */
     private void rotateDirectionIfNeeded(boolean isLetterPosition) {
 
+        // If next step in the same direction is valid, continue in the same direction
         Character nextStepValue = map.getNeighbourValue(position, direction);
         if (Character.valueOf(direction.getSymbol()).equals(nextStepValue)
                     || Character.valueOf('+').equals(nextStepValue)
@@ -83,10 +91,12 @@ public class MapProcessor {
             }
         }
 
+        // If going in the same direction isn't an option, then check for a valid turn
         switch (direction) {
             case UP:
             case DOWN:
 
+                // Vertical to horizontal turn
                 Character leftNeighbour = map.getNeighbourValue(position, LEFT);
                 Character rightNeighbour = map.getNeighbourValue(position, RIGHT);
 
@@ -94,20 +104,20 @@ public class MapProcessor {
 
                     throw new ForkInPathException();
 
-                } else if (Character.valueOf('-').equals(leftNeighbour)
-                        || Character.valueOf('+').equals(leftNeighbour)
-                        || isCapitalLetter(leftNeighbour)) {
+                } else if (isCharacterValidTurn(leftNeighbour, LEFT)) {
 
                     direction = MapDirection.LEFT;
 
-                } else if (Character.valueOf('-').equals(rightNeighbour)
-                        || Character.valueOf('+').equals(rightNeighbour)
-                        || isCapitalLetter(rightNeighbour)) {
+                } else if (isCharacterValidTurn(rightNeighbour, RIGHT)) {
+
                     direction = MapDirection.RIGHT;
+
                 }
                 break;
             case LEFT:
             case RIGHT:
+
+                // Horizontal to vertical turn
                 Character upNeighbour = map.getNeighbourValue(position, UP);
                 Character downNeighbour = map.getNeighbourValue(position, DOWN);
 
@@ -115,15 +125,11 @@ public class MapProcessor {
 
                     throw new ForkInPathException();
 
-                } else if (Character.valueOf('|').equals(upNeighbour)
-                        || Character.valueOf('+').equals(upNeighbour)
-                        || isCapitalLetter(upNeighbour)) {
+                } else if (isCharacterValidTurn(upNeighbour, UP)) {
 
                     direction = MapDirection.UP;
 
-                } else if (Character.valueOf('|').equals(downNeighbour)
-                        || Character.valueOf('+').equals(downNeighbour)
-                        || isCapitalLetter(downNeighbour)) {
+                } else if (isCharacterValidTurn(downNeighbour, DOWN)) {
 
                     direction = MapDirection.DOWN;
                 }
@@ -170,5 +176,17 @@ public class MapProcessor {
         }
 
         return foundLettersBuilder.toString();
+    }
+
+    private boolean isCharacterValidTurn(Character character, MapDirection direction) {
+
+        if (character == null || character.equals(' ')) {
+            return false;
+        }
+
+        return Character.valueOf(direction.getSymbol()).equals(character)
+                || Character.valueOf('+').equals(character)
+                || Character.valueOf('x').equals(character)
+                || isCapitalLetter(character);
     }
 }

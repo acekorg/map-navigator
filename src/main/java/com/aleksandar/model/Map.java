@@ -11,7 +11,6 @@ import lombok.NonNull;
  */
 public class Map {
 
-    @NonNull
     private char[][] matrix;
 
     @Getter
@@ -22,11 +21,14 @@ public class Map {
      *
      * @param matrix the map matrix
      */
-    public Map(char[][] matrix) {
+    public Map(@NonNull char[][] matrix) {
         this.matrix = matrix;
         initializeAndValidate();
     }
 
+    /**
+     * Initializes the map start and validates the starting and ending characters.
+     */
     private void initializeAndValidate() {
 
         boolean endCharacterFound = false;
